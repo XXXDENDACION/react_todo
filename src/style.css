@@ -1,0 +1,31 @@
+.item-list {
+    background-color: white;
+    display: flex;
+    width: 100%;
+    font-size: 24px;
+    border-bottom: 1px solid #ededed;
+    justify-content: space-between;
+}
+.view {
+    display: list-item;
+}
+.delete-item {
+    color:  #cc9a9a;
+    text-align: right;
+    padding: 30px;
+}
+.marker {
+    content: "";
+    display: block;
+    width: 23px;
+    height: 23px;
+    border: 1px solid black;
+    border-radius: 12px;
+    margin-right: 14px;
+}
+.edit {
+    border: none;
+    padding: 15px 15px 15px 15px;
+    display: flex;
+    align-items: center;
+}
