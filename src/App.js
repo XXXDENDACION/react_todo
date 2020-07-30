@@ -11,7 +11,8 @@ class App extends Component {
       {id: 2, content: 'play mario kart'},
     ],
     sortTodos: [
-
+      {id: 1, content: 'buy some milk'},
+      {id: 2, content: 'play mario kart'}
     ]
   }
   deleteTodo = (id) => {
@@ -30,7 +31,6 @@ class App extends Component {
       })
   }
   searchTodo =(content) => {
-  
       const sortTodos = this.state.todos.filter(todo => {   
         return todo.content.toLocaleLowerCase().includes(content.content.toLocaleLowerCase());
     })
