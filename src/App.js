@@ -1,12 +1,24 @@
-import React, { Component } from 'react';
-import Todos from './Todos'
+import React,{useState,useEffect} from 'react';
+//import Todos from './Todos'
 import AddTodo from './AddTodo'
 import Search from './Search'
 import Filters from './Filters';
+import TodoList from './TodoList'
 
-
-class App extends Component {
-  state = {
+function App() {
+  // state = {
+  //   inputValue: '',
+  //   todos: [
+  //     {id: 1, content: 'buy some milk', isDone: false},
+  //     {id: 2, content: 'play mario kart', isDone: false},
+  //   ],
+  //   sortTodos: [
+  //     {id: 1, content: 'buy some milk', isDone: false},
+  //     {id: 2, content: 'play mario kart', isDone: false}
+  //   ],
+  //   filterValue: 'All'
+  // }
+  const [state,setContent] = useState({
     inputValue: '',
     todos: [
       {id: 1, content: 'buy some milk', isDone: false},
@@ -17,103 +29,134 @@ class App extends Component {
       {id: 2, content: 'play mario kart', isDone: false}
     ],
     filterValue: 'All'
-  }
-  deleteTodo = (id) => {
-    const todos = this.state.todos.filter(todo => {
+  })
+  
+  const deleteTodo = (id) => {
+    const todos = state.todos.filter(todo => {
       return todo.id !== id
     })
     // const sortTodos = this.state.sortTodos.filter(todo => {
     //     return todo.content.toLocaleLowerCase().includes(todos.content.toLocaleLowerCase());
     // })
-    this.setState({
-      todos: todos
-    },()=>{this.searchTodo(this.state.inputValue)})  
+    setContent({
+      todos: todos,
+      sortTodos: todos,
+      inputValue: state.inputValue,
+      filterValue: state.filterValue,
+    });
+
+    // this.setState({
+    //   todos: todos
+    // },()=>{this.searchTodo(this.state.inputValue)})  
   }
-  addTodo = (todo) => {
+  const addTodo = (todo) => {
       todo.id = Math.random();
       todo.isDone = false;
-      let todos = [...this.state.todos, todo];
-      this.setState({
+      console.log(state.todos);
+      let todos = [...state.todos, todo];
+      setContent({
         todos: todos,
-        sortTodos: todos
-      },()=> {this.searchTodo(this.state.inputValue)})
-  }
-  searchTodo =(content) => {
+        sortTodos: todos,
+        inputValue: state.inputValue,
+        filterValue: state.filterValue,
+      });
 
-      let sortTodos = this.state.todos.filter(todo => {   
+      // this.setState({
+      //   todos,
+      //   sortTodos: todos
+      // },()=> {this.searchTodo(this.state.inputValue)})
+  }
+  const searchTodo =(content) => {
+      console.log(state.todos);
+      let sortTodos = state.todos.filter(todo => {   
         return todo.content.toLocaleLowerCase().includes(content.toLocaleLowerCase());
     })
-      if(this.state.filterValue === "Active") {
+      if(state.filterValue === "Active") {
       sortTodos = sortTodos.filter(todo => {
         return todo.isDone === false;
       })
     }
-      else if(this.state.filterValue === "Completed") {
+      else if(state.filterValue === "Completed") {
       sortTodos = sortTodos.filter(todo => {
           return todo.isDone === true;
         })
       }
-    this.setState({
-      sortTodos: sortTodos,
-      inputValue: content
-    })
+      setContent({
+        todos: state.todos,
+        sortTodos: sortTodos,
+        inputValue: content,
+        filterValue: state.filterValue,
+      })
+
+
   }
 
-  completeTodo = (id) => {
+  const completeTodo = (id) => {
     console.log("Complete", id);
-     const todos = this.state.todos.map(item => {
+     const todos = state.todos.map(item => {
         if(item.id === id) item.isDone = !item.isDone;
         return item;
      })
-     this.setState ({
-       todos: todos,
-       sortTodos: todos,
-     },() => {this.searchTodo(this.state.inputValue)})
+     setContent({
+        todos: todos,
+        sortTodos: todos,
+        inputValue: state.inputValue,
+        filterValue: state.filterValue
+     });
+    //  this.setState ({
+    //    todos: todos,
+    //    sortTodos: todos,
+    //  },() => {this.searchTodo(this.state.inputValue)})
 
   }
-  filterTodo = (content) => {
+  const filterTodo = (content) => {
     console.log(content);
     if(content === "All") {
-      this.setState({
-        sortTodos: this.state.todos,
-        filterValue: content
+      setContent({
+        sortTodos: state.todos,
+        filterValue: content,
+        todos: state.todos,
+        inputValue: state.inputValue
       })
     }
     else if(content === "Active") {
-      const todos = this.state.todos.filter(todo=> {
+      const todos = state.todos.filter(todo=> {
           return todo.isDone === false;
       })
-      this.setState({
+      setContent({
         sortTodos: todos,
-        filterValue: content
+        filterValue: content,
+        todos: state.todos,
+        inputValue: state.inputValue
       })
     }
     else if (content === "Completed") {
-      const todos = this.state.todos.filter(todo => {
+      const todos = state.todos.filter(todo => {
         return todo.isDone === true;
       })
-      this.setState({
+      setContent({
         sortTodos: todos,
-        filterValue: content
+        filterValue: content,
+        inputValue: state.inputValue,
+        todos: state.todos
       })
     }   
   }
-  render() {
+  useEffect(()=>{
+    searchTodo(state.inputValue);
+  },[state.todos, state.inputValue, state.filterValue])
     return (
       <div className="todo-app container">
         <h1 className="center blue-text">
           Todo's
         </h1>
-        <Search searchTodo={this.searchTodo}/>
-        <ul>
-        <Todos completeTodo={this.completeTodo} todos={this.state.sortTodos} deleteTodo={this.deleteTodo} />
-        </ul>
-        <Filters filterTodo={this.filterTodo}/>
-        <AddTodo addTodo={this.addTodo}/>
+        <Search searchTodo={searchTodo}/>
+        <TodoList completeTodo={completeTodo} todos={state.sortTodos} deleteTodo={deleteTodo}/>
+        <Filters filterTodo={filterTodo}/>
+        <AddTodo addTodo={addTodo}/>
       </div>
       
     );
-  }
 }
 
 
