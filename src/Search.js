@@ -7,7 +7,7 @@ class Search extends Component {
     handleChange = (e) => {
         this.setState({
             content: e.target.value
-        },() => {this.props.searchTodo(this.state)})
+        },() => {this.props.searchTodo(this.state.content)})
     }
     render() {
         return (

@@ -4,14 +4,17 @@ import './style.css'
 class Todos extends Component {
     
     render() {
-        const {todos, deleteTodo} = this.props;
+        const {todos, deleteTodo, completeTodo} = this.props;
         const todoList = todos.length ? (
             todos.map(item => {
+                let checked;
+                if(item.isDone) checked = "checked"
+                else  checked = "";
                 return  (
                     <li className="item-list" key={item.id}>
                     <div className="view">
                         <p className="edit">
-                            <span className ="marker"></span>
+                            <span className = {`marker ${checked}`} onClick={()=> completeTodo(item.id)}></span>
                             {item.content}
                             </p>
                     </div>

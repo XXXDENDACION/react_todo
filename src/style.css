@@ -29,3 +29,37 @@
     display: flex;
     align-items: center;
 }
+.panel {
+    color: #777;
+    padding: 10px 15px;
+    height: 20px;
+
+    background-color: white;
+    border-top: 1px solid #e6e6e6;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    flex-direction: row;
+    align-items: center;
+}
+.filter-all, .filter-active, .filter-completed {
+    display: inline;
+    border-radius: 3px;
+    margin: 5px;
+    cursor: pointer;
+}
+.selected  {
+    border: 1px solid rgba(175, 47, 47, 0.2);
+}
+.clear-completed {
+    background: none;
+    font-size: 100%;
+    text-decoration: none;
+    border: none;
+    color: #777;
+    box-sizing: border-box;
+    display: none;
+}
+.checked {
+    background: green;
+}
